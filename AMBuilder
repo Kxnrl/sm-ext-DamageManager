@@ -35,4 +35,9 @@ for sdk_name in Extension.sdks:
     binary.compiler.cxxflags += [ '-std=c++14' ]
     binary.compiler.cxxflags += [ '-include', 'mathlib/mathlib.h' ]
 
+  if sys.platform == 'win32':
+    binary.compiler.cxxflags += [ '/DSMEXT_CONF_GITCOMMIT="' + os.environ['GITCOMMIT'] + '"' ]
+  elif sys.platform == 'linux' or sys.platform == 'linux2':
+    binary.compiler.cxxflags += [ '-DSMEXT_CONF_GITCOMMIT="' + os.environ['GITCOMMIT'] + '"' ]
+
 Extension.extensions = builder.Add(project)

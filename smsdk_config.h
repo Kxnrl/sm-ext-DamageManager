@@ -1,9 +1,13 @@
 ﻿#ifndef _INCLUDE_SOURCEMOD_EXTENSION_CONFIG_H_
 #define _INCLUDE_SOURCEMOD_EXTENSION_CONFIG_H_
 
+#ifndef SMEXT_CONF_GITCOMMIT
+#    define SMEXT_CONF_GITCOMMIT "LocalBuild"
+#endif
+
 #define SMEXT_CONF_NAME "Damage Manager"
 #define SMEXT_CONF_DESCRIPTION ""
-#define SMEXT_CONF_VERSION "1.0"
+#define SMEXT_CONF_VERSION "1.1." SMEXT_CONF_GITCOMMIT
 #define SMEXT_CONF_AUTHOR "Kyle \"Kxnrl\" Frankiss"
 #define SMEXT_CONF_URL "https://www.kxnrl.com"
 #define SMEXT_CONF_LOGTAG "DamageManager"

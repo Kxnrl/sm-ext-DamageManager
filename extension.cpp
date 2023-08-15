@@ -97,9 +97,11 @@ private:
 };
 
 int    g_iHookId[SM_MAXPLAYERS + 1][HOOK_MAX_COUNT];
-bool   g_bInHook;
-cell_t g_xDamageForce[3];
-cell_t g_xDamagePosition[3];
+volatile bool   g_bInHook;
+volatile cell_t g_xObjectsPenetrated;
+volatile cell_t g_xDamagedOtherPlayers;
+volatile cell_t g_xDamageForce[3];
+volatile cell_t g_xDamagePosition[3];
 
 SH_DECL_MANUALHOOK3_void(TraceAttack, 0, 0, 0, CTakeDamageInfoHack&, const Vector&, CGameTrace*);
 SH_DECL_MANUALHOOK1(OnTakeDamage, 0, 0, 0, int, CTakeDamageInfoHack&);
@@ -180,6 +182,9 @@ int DamageManager::Hook_OnTakeDamage(CTakeDamageInfoHack& info) const
     g_xDamagePosition[0] = sp_ftoc(pos.x);
     g_xDamagePosition[1] = sp_ftoc(pos.y);
     g_xDamagePosition[2] = sp_ftoc(pos.z);
+
+    g_xObjectsPenetrated   = info.GetObjectsPenetrated();
+    g_xDamagedOtherPlayers = info.GetDamagedOtherPlayers();
 
     const auto bDamageValid  = !!nRetVal;
     const auto bKillerValid  = killer > 0 && killer <= playerhelpers->GetMaxClients();
@@ -622,6 +627,20 @@ static cell_t Native_GetDamagePosition(IPluginContext* pContext, const cell_t* p
     return 1;
 }
 
+static cell_t Native_GetDamagedOtherPlayers(IPluginContext* pContext, const cell_t* params)
+{
+    CHECKNATIVECALL;
+
+    return g_xDamagedOtherPlayers;
+}
+
+static cell_t Native_GetObjectsPenetrated(IPluginContext* pContext, const cell_t* params)
+{
+    CHECKNATIVECALL;
+
+    return g_xObjectsPenetrated;
+}
+
 static cell_t Native_GetTraceHitBox(IPluginContext* pContext, const cell_t* params)
 {
     CHECKNATIVECALL;
@@ -693,6 +712,8 @@ sp_nativeinfo_t g_Natives[] = {
 
     {"DamageManager_GetDamageForce", Native_GetDamageForce},
     {"DamageManager_GetDamagePosition", Native_GetDamagePosition},
+    {"DamageManager_GetDamagedOtherPlayers", Native_GetDamagedOtherPlayers},
+    {"DamageManager_GetObjectsPenetrated", Native_GetObjectsPenetrated},
 
     {"DamageManager_GetCurrentTraceHitBox", Native_GetTraceHitBox},
     {"DamageManager_GetCurrentTraceHitGroup", Native_GetTraceHitGroup},

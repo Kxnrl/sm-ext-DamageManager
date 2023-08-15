@@ -35,6 +35,14 @@ public:
     {
         return m_hInflictor.IsValid() ? m_hInflictor.GetEntryIndex() : -1;
     }
+    inline int GetDamagedOtherPlayers() const
+    {
+        return m_iDamagedOtherPlayers;
+    }
+    inline int GetObjectsPenetrated() const
+    {
+        return m_iObjectsPenetrated;
+    }
 #if SOURCE_ENGINE >= SE_ORANGEBOX && SOURCE_ENGINE != SE_LEFT4DEAD
     inline int GetWeapon() const
     {
